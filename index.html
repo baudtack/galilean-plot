@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="flot/jquery.min.js"></script>
+        <script src="flot/jquery.flot.js"></script>
+        <script>
+         function calc_points(peri, apoa, c) {
+           var points = [];
+           for (var i = -10; i <= 20; i+=0.001) {
+             var y;
+             if (i > 0) {
+               y = apoa * Math.sin(c * i);
+             } else {
+               y = peri * Math.sin(c * i);
+             }
+               points.push([y, i]);
+           }
+           return points;
+         }
+
+         function calc_c(period) {
+           return (2 * Math.PI) / period;
+         }
+
+         $(document).ready(function () {
+           var io_peri = 420000;
+           var io_apoa = 423400;
+           var io_c = calc_c(1.769137786);
+           var io = calc_points(io_peri, io_apoa, io_c);
+
+           var euro_peri = 664862;
+           var euro_apoa = 676938;
+           var euro_c = calc_c(3.551181);
+           var euro = calc_points(euro_peri, euro_apoa, euro_c);
+
+           var gany_peri = 1069200;
+           var gany_apoa = 1071600;
+           var gany_c = calc_c(7.15455296);
+           var gany = calc_points(gany_peri, gany_apoa, gany_c);
+
+           var calli_peri = 1869000;
+           var calli_apoa = 1897000;
+           var calli_c = calc_c(16.6890184);
+           var calli = calc_points(calli_peri, calli_apoa, calli_c);
+
+           $.plot($("#orbits"), [{data: io, label: "Io" },
+                                 {data: euro, label: "Europa"},
+                                 {data: gany, label: "Ganymede"},
+                                 {data: calli, label: "Callisto"}],
+                  { xaxis: { max: 2000000, min: -2000000 },
+                   yaxis: { max: 20, min: 0 } }); 
+          });
+        </script>
+    </head>
+    <body>
+      <h2>Disclaimer: Don't use this chart to try to fly to one of the Galilean Moons</h2>
+      <div id="orbits" style="width:800px;height:900px;"></div>
+      <div>Distance from Jupiter in Kilometers</div>
+    </body>
+</html>
